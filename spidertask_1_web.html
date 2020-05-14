@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+        .canvas {
+            border:1px solid black;
+        }
+    </style>
+    <link rel="stylesheet" href="bubbles.css">
+  </head>
+  <body>
+    <div id="start_page">
+      <h1 id="title">BUBBLES</h1>
+      <h2>WELCOME TO BUBBLES SOLDIER</h2>
+      <p>HOW TO PLAY</p>
+      <p>You have been summoned to destroy our enemies top weapon(The BUBBLES!)</p>
+      <p>Bubbles will appear randomly, on screen!</p>
+      <p>Your task SOLDIER, is to implode each bubble into sheer nothingness</p>
+      <p>Wander offscreen if you are too tired, and the mission will be on standby...Come back on to resume</p>
+      <p>Make sure the bubble don't overwhelm the area</p>
+      <p><em id="hint">The above condition is termed critical</em></p>
+      <p>I can only help you out for 10 seconds during critical condition</p>
+      <p>Do your Best</p>
+      <p>Go on ahead soldier!</p>
+      <input id="startbutton" type="button" value="START" onclick="start_game()">
+    </div>
+      <canvas id="canvas">Canvas is not supported!</Canvas>
+    <div id="end">
+      <h1>YOU DID WELL</h1>
+      <h2>SCORE: <strong id="score"></strong></h2>
+      <h2>TIME SURVIVED: <strong id="minutes"></strong> minutes and <strong id="sec"></strong> seconds</h2>
+    </div>
+    <script src="bubbles.js"></script>
+  </body>
+</html>  
