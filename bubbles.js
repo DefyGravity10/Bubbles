@@ -1,6 +1,6 @@
 let canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.height = window.innerHeight-40;
 let c = canvas.getContext('2d');
 
 var myvar;                                                                              //Variable to set interval for background timer
@@ -14,11 +14,14 @@ var pause_value='false';                                                        
 
 canvas.style.display="none";
 document.getElementById("end").style.display="none";
+document.getElementById("canvasScore").style.display="none";
 
 function start_game()                                                                   //Function to move on to game screen from start/home screen
 {
     document.getElementById("start_page").style.display="none";
     canvas.style.display="block";
+    document.getElementById("canvasScore").style.display="block";
+    document.getElementById("canv_score").innerHTML=score;
 }
 
 function end_game()                                                                     //Function to move on to game over screen when player has lost
@@ -27,6 +30,7 @@ function end_game()                                                             
     document.getElementById("minutes").innerHTML=minutes;
     document.getElementById("sec").innerHTML=seconds;
     document.getElementById("end").style.display="block";
+    document.getElementById("canvasScore").style.display="none";
     lose.play();
 }
 
@@ -103,26 +107,26 @@ class Circle {                                                                  
                 var ydif=-1*(this.y-circleArray[f].y);
                 var vel_xdif=this.dx-circleArray[f].dx;
                 var vel_ydif=this.dy-circleArray[f].dy;
-                if(xdif*vel_xdif+ydif*vel_ydif>=0)                                  //Bubbles bounce off each other when they come in contact
+                if(xdif*vel_xdif+ydif*vel_ydif>=0)                                  //This code segment deals with bubble bounce using law of conservation of momentum
                 {
-                    const angle=-Math.atan2(ydif,xdif);                             //This code segment deals with bubble bounce using law of conservation of momentum
+                    const angle=-Math.atan2(ydif,xdif);                             //The angle between the line joining the two centres and the x-axis
+                                                                                    //Assuming the velocities are of a cooridate system rotated by an angle 'angle'
+                    const u1x=xrotate(this.dx,this.dy,angle);                       //Transforming  x and y velocities of the two particles to the original coordinate system i.e. without rotation
+                    const u1y=yrotate(this.dx,this.dy,angle);
+                    const u2x=xrotate(circleArray[f].dx,circleArray[f].dy,angle);
+                    const u2y=yrotate(circleArray[f].dx,circleArray[f].dy,angle);
 
-                    const u1x=rotate(this.dx,angle);
-                    const u1y=rotate(this.dy,angle);
-                    const u2x=rotate(circleArray[f].dx,angle);
-                    const u2y=rotate(circleArray[f].dy,angle);
-
-                    const v1x=u2x;
+                    const v1x=u2x;                                                  //Since masses are same for the colliding particles the elastic collision final speeds in original axis would be something like this
                     const v1y=u1y;
                     const v2x=u1x;
                     const v2y=u2y;
 
-                    const vf1x=rotate(v1x,-angle);
-                    const vf1y=rotate(v1y,-angle);
-                    const vf2x=rotate(v2x,-angle);
-                    const vf2y=rotate(v2y,-angle);
+                    const vf1x=xrotate(v1x,v1y,-angle);                             //Reverse transforming from original coordinate system back to rotated coordinate system
+                    const vf1y=yrotate(v1x,v1y,-angle);
+                    const vf2x=xrotate(v2x,v2y,-angle);
+                    const vf2y=yrotate(v2x,v2y,-angle);
 
-                    this.dx=vf1x;
+                    this.dx=vf1x;                                                   //Equating the final resultant velocities to particles velocities
                     this.dy=vf1y;
                     circleArray[f].dx=vf2x;
                     circleArray[f].dy=vf2y;
@@ -135,10 +139,16 @@ class Circle {                                                                  
     }
 }
 
-function rotate(a, b)                                                               //Function to rotate the canvas and to return velocity
+function xrotate(a, b, c)                                                            //Functions to reverse transorm on to xy plane rotated by 'angle' respectively for x and y coordinates
 {
-    c.rotate(b);
-    return -a;
+    const ret=a*Math.cos(c)-b*Math.sin(c);
+    return ret;
+}
+
+function yrotate(a, b, c)
+{
+    const reta=a*Math.sin(c)+b*Math.cos(c);
+    return reta;
 }
 
 let circleArray = [];                                                               //List to store all bubble objects
@@ -159,6 +169,7 @@ canvas.addEventListener("click",function(e){
         {
             circleArray.splice(k,1);
             score++;     
+            document.getElementById("canv_score").innerHTML=score;
             sound.play();   
         }
     

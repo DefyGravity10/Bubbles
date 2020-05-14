@@ -23,3 +23,8 @@ html {
     text-align: center;
     font-size: 40px;
 }
+
+#canvasScore {
+    text-align: end;
+    font-size: 40 px;
+}
